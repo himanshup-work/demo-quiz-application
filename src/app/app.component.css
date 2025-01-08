@@ -1,6 +1,8 @@
-section {
+body {
+    margin-top: 56px;
     height: 100%;
     width: 100%;
     background-image: url("./assets/home-bg-image.jpg");
+    background-attachment: fixed;
     background-size: cover;
 }
