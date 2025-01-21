@@ -1,0 +1,22 @@
+.user-info {
+  background-color: rgba(179, 173, 173, 0.7);
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+}
+.quizzes {
+  margin-top: 20px;
+  background-color: rgba(179, 173, 173, 0.7);
+}
+.quiz-item {
+  padding: 15px;
+  margin: 10px;
+  border-radius: 8px;
+  background-color: rgba(215, 226, 218, 0.795);
+  flex: 1 1 calc(33.333% - 20px); /* Adjust the width for responsiveness */
+}
+.quizzes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
