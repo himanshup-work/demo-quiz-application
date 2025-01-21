@@ -1,0 +1,60 @@
+<div class="container pt-5 pb-5">
+  <div class="login-form">
+    <h2 class="form-title">Login to Your Account</h2>
+    <form [formGroup]="userForm">
+      <!-- Email Address -->
+      <div class="mb-3">
+        <label for="email" class="form-label">Email Address</label>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          formControlName="email"
+          placeholder="Enter your email"
+          required
+        />
+        <div>
+          @if (userForm.controls["email"].touched &&
+          userForm.controls["email"].errors?.["required"]) {
+          <span class="text-danger"> email is required </span>
+          } @else if (userForm.controls["email"].touched &&
+          userForm.controls["email"].errors?.["email"]) {
+          <span class="text-danger"> please enter valid email </span>
+          }
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          placeholder="Enter your password"
+          formControlName="password"
+          required
+        />
+        <div>
+          @if (userForm.controls["password"].touched &&
+          userForm.controls["password"].errors?.["required"]) {
+          <span class="text-danger"> password is required </span>
+          }
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary w-100" (click)="onSubmit()">
+        Login
+      </button>
+
+      <!-- Link to Sign Up -->
+      <div class="text-center mt-3">
+        <p>Don't have an account? <a routerLink="/register">Sign Up</a></p>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- <div>
+    {{formValue | json}}
+</div> -->

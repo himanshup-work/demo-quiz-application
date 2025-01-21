@@ -1,7 +1,8 @@
-.signup-form {
-  max-width: 600px;
+.login-form {
+  max-width: 400px;
   margin: auto;
   background-color: rgba(179, 173, 173, 0.7);
+  padding: 20px;
   border-radius: 8px;
 }
 .form-title {
@@ -11,11 +12,4 @@
 }
 .text-danger {
   font-size: 0.8rem;
-}
-.imgDiv {
-  img {
-    width: 40px;
-    height: 50px;
-    margin-top: -50px;
-  }
 }
