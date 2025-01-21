@@ -1,0 +1,19 @@
+.create-quiz-form {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.form-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+.question-group {
+    margin-bottom: 20px;
+}
+.question-group label {
+    font-weight: bold;
+}
