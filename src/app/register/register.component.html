@@ -19,11 +19,8 @@
             required
           />
           @if(fullName.touched && fullName.invalid){
-            <p class="text-danger">
-                fullname is required
-            </p>
+          <p class="text-danger">fullname is required</p>
           }
-          
         </div>
 
         <!-- Email Address -->
@@ -40,9 +37,7 @@
             required
           />
           @if(email.touched && email.invalid){
-            <p class="text-danger">
-                email is required
-            </p>
+          <p class="text-danger">email is required</p>
           }
         </div>
 
@@ -60,9 +55,7 @@
             required
           />
           @if(username.touched && username.invalid){
-            <p class="text-danger">
-                username is required
-            </p>
+          <p class="text-danger">username is required</p>
           }
         </div>
 
@@ -80,9 +73,7 @@
             required
           />
           @if(password.touched && password.invalid){
-            <p class="text-danger">
-                password is required
-            </p>
+          <p class="text-danger">password is required</p>
           }
         </div>
 
@@ -102,46 +93,42 @@
             required
           />
           @if(confirmPassword.touched && confirmPassword.invalid){
-            <p class="text-danger">
-                confirmPassword is required
-            </p>
+          <p class="text-danger">confirmPassword is required</p>
           }
         </div>
 
         <!-- Choose an image -->
         <div class="mb-3">
-            <label for="image" class="form-label"
-              >Choose an Image</label
-            >
-            <input
-              type="file"
-              class=""
-              id="image"
-              name="image"
-              accept="image/*"
-              [multiple]="false"
-              (change)="onFileSelected($event)"
-              ngModel
-              required
-            />
-            @if(cover){
-              <div class="imgDiv" align="right">
-                <img [src]="cover"> 
-              </div>
-            }
-            @if (showError) {
-                <p class="text-danger">
-                    image is required
-                </p>
-            }
+          <label for="image" class="form-label">Choose an Image</label>
+          <input
+            type="file"
+            class=""
+            id="image"
+            name="image"
+            accept="image/*"
+            [multiple]="false"
+            (change)="onFileSelected($event)"
+            ngModel
+            required
+          />
+          @if(cover){
+          <div class="imgDiv" align="right">
+            <img [src]="cover" />
           </div>
+          } @if (showError) {
+          <p class="text-danger">image is required</p>
+          }
+        </div>
 
         <!-- Submit Button -->
         <button type="submit" class="btn btn-primary w-100">Sign Up</button>
 
         <!-- Already registered -->
         <div class="text-center mt-3">
-          <small>Already have an account? <a href="#">Login here</a></small>
+          <small
+            >Already have an account?
+            <a routerLink="/login">Login here</a></small
+          >
         </div>
       </form>
     </div>
