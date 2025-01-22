@@ -1,120 +1,84 @@
-<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="#">Quiz Website</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">My Quizzes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-primary text-white" href="#">Logout</a>
-                </li>
-            </ul>
+<div class="container my-5">
+  <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Create Quiz</h3>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="quizTitle" class="form-label">Quiz Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="quizTitle"
+            placeholder="Enter quiz title"
+            formControlName="quizTitle"
+          />
         </div>
-    </div>
-</nav> -->
 
-<!-- Create Quiz Form -->
-<div class="container">
-    <div class="create-quiz-form">
-        <h2 class="form-title">Create Quiz</h2>
-        
-        <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
-            <!-- Quiz Title -->
-            <div class="mb-3">
-                <label for="quizTitle" class="form-label">Quiz Title</label>
-                <input type="text" 
-                       class="form-control" 
-                       id="quizTitle" 
-                       formControlName="title" 
-                       placeholder="Enter quiz title">
-                
-                @if (quizForm.controls['title'].invalid && quizForm.controls['title'].touched) {
-                    <div class="text-danger">
-                        @if (quizForm.controls['title'].errors?.['required']) {
-                            <small>Quiz title is required.</small>
-                        }
-                        @if (quizForm.controls['title'].errors?.['minlength']) {
-                            <small>Title must be at least 3 characters long.</small>
-                        }
-                    </div>
-                }
+        <div formArrayName="questions">
+          @for (question of questions.controls; track $index) {
+          <div class="card my-3" [formGroupName]="$index">
+            <div class="card-header">
+              <h5 class="card-title">Question {{ $index + 1 }}</h5>
             </div>
-            
-            <!-- Questions Container -->
-            <div formArrayName="questions">
-                @for (question of questionsFormArray.controls; track $index) {
-                    <div [formGroupName]="$index" class="question-group mb-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <label>Question {{$index + 1}}</label>
-                            @if (questionsFormArray.length > 1) {
-                                <button type="button" 
-                                        class="btn btn-sm btn-danger" 
-                                        (click)="removeQuestion($index)">
-                                    Remove
-                                </button>
-                            }
-                        </div>
-                        
-                        <!-- Question Text Input -->
-                        <input type="text" 
-                               class="form-control mb-2" 
-                               formControlName="text" 
-                               placeholder="Enter your question">
-                        
-                        @if (quizForm.controls['text'].invalid && quizForm.controls['text'].touched) {
-                            <div class="text-danger">
-                                @if (quizForm.controls['text'].errors?.['required']) {
-                                    <small>Question is required.</small>
-                                }
-                                @if (quizForm.controls['text'].errors?.['minlength']) {
-                                    <small>Question must be at least 5 characters long.</small>
-                                }
-                            </div>
-                        }
-                        
-                        <!-- Options -->
-                        <div formArrayName="options">
-                            @for (option of getOptionsFormArray($index).controls; track $index) {
-                                <input type="text" 
-                                       class="form-control mb-2" 
-                                       [formControlName]="$index" 
-                                       placeholder="Option {{$index + 1}}">
-                                
-                                @if (option.invalid && option.touched) {
-                                    <div class="text-danger">
-                                        <small>Option is required.</small>
-                                    </div>
-                                }
-                            }
-                        </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label [for]="'questionText' + $index" class="form-label">Question Text</label>
+                <input
+                  type="text"
+                  [id]="'questionText' + $index"
+                  class="form-control"
+                  formControlName="questionText"
+                />
+              </div>
+              <div formArrayName="options">
+                @for (option of getOptionsFormArray($index).controls; track $index; let j = $index) {
+                <div class="mb-2">
+                  <div class="input-group">
+                    <div class="input-group-text">
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        [value]="j"
+                        formControlName="correctOption"
+                      />
                     </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [formControlName]="j"
+                      [placeholder]="'Option ' + (j + 1)"
+                    />
+                  </div>
+                </div>
                 }
+              </div>
             </div>
-            
-            <!-- Add Question Button -->
-            @if (questionsFormArray.length < maxQuestions) {
-                <button type="button" 
-                        class="btn btn-secondary mb-3" 
-                        (click)="addQuestion()">
-                    Add Another Question
-                </button>
-            }
-            
-            <!-- Submit Button -->
-            @if (questionsFormArray.length > 0) {
-                <button type="submit" 
-                        class="btn btn-primary w-100" 
-                        [disabled]="quizForm.invalid">
-                    Create Quiz
-                </button>
-            }
-        </form>
+            <div class="card-footer">
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="removeQuestion($index)"
+              >
+                Remove Question
+              </button>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+      <div class="card-footer">
+        <button
+          type="button"
+          class="btn btn-primary me-2"
+          (click)="addQuestion()"
+        >
+          Add Question
+        </button>
+
+        <button type="submit" class="btn btn-success">Save Quiz</button>
+      </div>
     </div>
+  </form>
 </div>
