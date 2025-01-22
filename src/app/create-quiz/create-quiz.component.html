@@ -1,84 +1,89 @@
 <div class="container my-5">
-  <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Create Quiz</h3>
-      </div>
-      <div class="card-body">
+  <div class="create-quiz-form card">
+    <div class="card-header">
+      <h2 class="form-title">Create Quiz</h2>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
           <label for="quizTitle" class="form-label">Quiz Title</label>
           <input
             type="text"
             class="form-control"
             id="quizTitle"
+            formControlName="title"
             placeholder="Enter quiz title"
-            formControlName="quizTitle"
           />
         </div>
-
         <div formArrayName="questions">
-          @for (question of questions.controls; track $index) {
-          <div class="card my-3" [formGroupName]="$index">
-            <div class="card-header">
-              <h5 class="card-title">Question {{ $index + 1 }}</h5>
-            </div>
-            <div class="card-body">
-              <div class="mb-3">
-                <label [for]="'questionText' + $index" class="form-label">Question Text</label>
-                <input
-                  type="text"
-                  [id]="'questionText' + $index"
-                  class="form-control"
-                  formControlName="questionText"
-                />
-              </div>
-              <div formArrayName="options">
-                @for (option of getOptionsFormArray($index).controls; track $index; let j = $index) {
-                <div class="mb-2">
-                  <div class="input-group">
-                    <div class="input-group-text">
-                      <input
-                        type="radio"
-                        class="form-check-input"
-                        [value]="j"
-                        formControlName="correctOption"
-                      />
-                    </div>
+          @for (question of questionsFormArray.controls; track $index; let
+          i=$index) {
+          <div>
+            <div [formGroupName]="i" class="question-group mb-4">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h5>Question {{ i + 1 }}</h5>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <input
+                    type="text"
+                    class="form-control mb-2"
+                    formControlName="text"
+                    placeholder="Enter your question"
+                  />
+                  <div formArrayName="options">
+                    @for (option of getOptionsFormArray(i).controls; track
+                    $index;let j=$index) {
                     <input
                       type="text"
-                      class="form-control"
+                      class="form-control mb-2"
                       [formControlName]="j"
-                      [placeholder]="'Option ' + (j + 1)"
+                      placeholder="Option {{ j + 1 }}"
+                    />
+                    }
+                  </div>
+                  <div>
+                    <label>Answer {{ i + 1 }}</label>
+                    <input 
+                    type="text"
+                    class="form-control mb-2"
+                    formControlName="correctOption"
+                    placeholder="Answer {{ i + 1 }}"
                     />
                   </div>
                 </div>
-                }
+                <div class="card-footer">
+                  <button
+                      type="button"
+                      class="btn btn-sm btn-danger"
+                      (click)="removeQuestion(i)"
+                    >
+                      Remove Question
+                    </button>
+                </div>
               </div>
-            </div>
-            <div class="card-footer">
-              <button
-                type="button"
-                class="btn btn-danger"
-                (click)="removeQuestion($index)"
-              >
-                Remove Question
-              </button>
             </div>
           </div>
           }
         </div>
-      </div>
-      <div class="card-footer">
-        <button
-          type="button"
-          class="btn btn-primary me-2"
-          (click)="addQuestion()"
-        >
-          Add Question
-        </button>
-
-        <button type="submit" class="btn btn-success">Save Quiz</button>
-      </div>
+        <div class="card-footer">
+          <button
+            type="button"
+            class="btn btn-secondary mx-2"
+            (click)="addQuestion()"
+          >
+            Add Question
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary mx-2"
+          >
+            Create Quiz
+          </button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 </div>
