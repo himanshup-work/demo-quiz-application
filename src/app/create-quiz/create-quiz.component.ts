@@ -1,5 +1,6 @@
+import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-quiz',
@@ -9,16 +10,22 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
   styleUrl: './create-quiz.component.css',
 })
 export class CreateQuizComponent implements OnInit{
+
+  getCorrectOptionControl(questionIndex: number): FormControl {
+    return this.questionsFormArray.at(questionIndex).get('correctOption') as FormControl;
+  }
   quizForm!: FormGroup;
   maxQuestions = 15; // Adjust as needed
 
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit() {
+  constructor(private fb: FormBuilder) {
     this.quizForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(3)]],
+      quizTitle: ['', [Validators.required, Validators.minLength(3)]],
       questions: this.fb.array([])
     });
+  }
+
+  ngOnInit() {
+    
   }
 
   get questionsFormArray(): FormArray {
