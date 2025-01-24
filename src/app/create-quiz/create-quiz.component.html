@@ -16,9 +16,11 @@
           />
         </div>
         <div formArrayName="questions">
-          @for (question of questionsFormArray.controls; track $index; let i =
-          $index) {
-          <div [formGroupName]="i" class="question-group mb-4">
+          <div
+            *ngFor="let question of questionsFormArray.controls; let i = index"
+            [formGroupName]="i"
+            class="question-group mb-4"
+          >
             <div class="card">
               <div class="card-header">
                 <h5>Question {{ i + 1 }}</h5>
@@ -35,9 +37,13 @@
                   placeholder="Enter your question"
                 />
                 <div formArrayName="options">
-                  @for (option of getOptionsFormArray(i).controls; track $index;
-                  let j = $index) {
-                  <div class="mb-2">
+                  <div
+                    class="mb-2"
+                    *ngFor="
+                      let option of getOptionsFormArray(i).controls;
+                      let j = index
+                    "
+                  >
                     <div class="input-group">
                       <div class="input-group-text">
                         <input
@@ -56,7 +62,6 @@
                       />
                     </div>
                   </div>
-                  }
                 </div>
               </div>
               <div class="card-footer">
@@ -70,7 +75,6 @@
               </div>
             </div>
           </div>
-          }
         </div>
         <div class="card-footer">
           <button

@@ -1,18 +1,26 @@
 import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-create-quiz',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgFor],
   templateUrl: './create-quiz.component.html',
   styleUrl: './create-quiz.component.css',
 })
-export class CreateQuizComponent implements OnInit{
-
+export class CreateQuizComponent implements OnInit {
   getCorrectOptionControl(questionIndex: number): FormControl {
-    return this.questionsFormArray.at(questionIndex).get('correctOption') as FormControl;
+    return this.questionsFormArray
+      .at(questionIndex)
+      .get('correctOption') as FormControl;
   }
   quizForm!: FormGroup;
   maxQuestions = 15; // Adjust as needed
@@ -20,16 +28,16 @@ export class CreateQuizComponent implements OnInit{
   constructor(private fb: FormBuilder) {
     this.quizForm = this.fb.group({
       quizTitle: ['', [Validators.required, Validators.minLength(3)]],
-      questions: this.fb.array([])
+      questions: this.fb.array([]),
     });
   }
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
   get questionsFormArray(): FormArray {
-    return this.quizForm.get('questions') as FormArray;
+    const k =this.quizForm.get('questions') as FormArray;
+
+    return k;
   }
 
   getOptionsFormArray(index: number): FormArray {
@@ -57,9 +65,9 @@ export class CreateQuizComponent implements OnInit{
         ['', Validators.required],
         ['', Validators.required],
         ['', Validators.required],
-        ['', Validators.required] // Adjust number of options as needed
+        ['', Validators.required], // Adjust number of options as needed
       ]),
-      correctOption: ['', Validators.required]
+      correctOption: ['', Validators.required],
     });
   }
 }
