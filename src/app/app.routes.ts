@@ -4,6 +4,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { UserHomeComponent } from './user-home/user-home.component';
 import { UpdateUserComponent } from './update-user/update-user.component';
+import { CreateQuizComponent } from './create-quiz/create-quiz.component';
 
 export const routes: Routes = [
   // {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   {path: 'userHome', component: UserHomeComponent},
-  {path: 'updateUser', component: UpdateUserComponent}
+  {path: 'updateUser', component: UpdateUserComponent},
+  {path: 'createQuiz', component: CreateQuizComponent}
 ];
