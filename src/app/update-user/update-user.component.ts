@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, Inject, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -12,21 +13,23 @@ import {
   templateUrl: './update-user.component.html',
   styleUrl: './update-user.component.css',
 })
-export class UpdateUserComponent {
+export class UpdateUserComponent implements OnInit{
+  httpClient = inject(HttpClient);
+  
   userForm: FormGroup = new FormGroup({
-    fullName: new FormControl('Himanshu Pal', [
+    fullName: new FormControl('', [
       Validators.required,
       Validators.minLength(5),
     ]),
-    email: new FormControl('himanshu@gmail.com', [
+    email: new FormControl('', [
       Validators.required,
       Validators.email,
     ]),
-    username: new FormControl('himanshu1999', [
+    username: new FormControl('', [
       Validators.required,
       Validators.minLength(5),
     ]),
-    password: new FormControl('12345678', [
+    password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
     ]),
@@ -36,6 +39,19 @@ export class UpdateUserComponent {
   cover: any;
   cover_file: any;
   showError = false;
+  
+  ngOnInit(): void {
+    
+    let url = "http://localhost:8080/user/926312db-4157-4027-a21d-b241d8b0277f"
+    this.httpClient.get(url).subscribe((res: any)=>{
+      this.userForm.controls['fullName'].setValue(res.data.fullName);
+      this.userForm.controls['email'].setValue(res.data.email);
+      this.userForm.controls['username'].setValue(res.data.username);
+      this.userForm.controls['password'].setValue(res.data.password);
+      this.cover = 'data:image/jpeg;base64,' + res.data.image;
+    })
+  }  
+
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
