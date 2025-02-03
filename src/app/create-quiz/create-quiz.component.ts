@@ -1,9 +1,9 @@
 import { NgFor } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -17,27 +17,27 @@ import {
   styleUrl: './create-quiz.component.css',
 })
 export class CreateQuizComponent implements OnInit {
-  getCorrectOptionControl(questionIndex: number): FormControl {
-    return this.questionsFormArray
-      .at(questionIndex)
-      .get('correctOption') as FormControl;
-  }
   quizForm!: FormGroup;
-  maxQuestions = 15; // Adjust as needed
+  maxQuestions = 15;
+  http = inject(HttpClient);
 
   constructor(private fb: FormBuilder) {
     this.quizForm = this.fb.group({
       quizTitle: ['', [Validators.required, Validators.minLength(3)]],
+      quizCategory: ['', [Validators.required]],
+      quizDescription: ['', [Validators.required, Validators.minLength(25)]],
+      passingScore: ['', [Validators.required]],
+      timeLimit: ['', [Validators.required]],
       questions: this.fb.array([]),
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.addQuestion(); // Add the first question by default
+  }
 
   get questionsFormArray(): FormArray {
-    const k =this.quizForm.get('questions') as FormArray;
-
-    return k;
+    return this.quizForm.get('questions') as FormArray;
   }
 
   getOptionsFormArray(index: number): FormArray {
@@ -54,7 +54,24 @@ export class CreateQuizComponent implements OnInit {
     this.questionsFormArray.removeAt(index);
   }
 
+  markCorrectAnswer(questionIndex: number, optionIndex: number) {
+    const options = this.getOptionsFormArray(questionIndex);
+    options.controls.forEach((optionControl, index) => {
+      optionControl.get('isAnswer')?.setValue(index === optionIndex);
+    });
+  }
+
   onSubmit() {
+    if (this.quizForm.invalid) {
+      console.log('INVALID_FORM!!!!!!!!!!!');
+      console.log(this.quizForm.value);
+    }
+    let url = 'http://localhost:8080/quiz/create';
+    this.http.post('url', this.quizForm.value).subscribe((res: any) => {
+      if (res.status) {
+        alert(res.message);
+      }
+    });
     console.log(this.quizForm.value);
   }
 
@@ -62,12 +79,23 @@ export class CreateQuizComponent implements OnInit {
     return this.fb.group({
       text: ['', [Validators.required, Validators.minLength(5)]],
       options: this.fb.array([
-        ['', Validators.required],
-        ['', Validators.required],
-        ['', Validators.required],
-        ['', Validators.required], // Adjust number of options as needed
+        this.fb.group({
+          optionText: ['', Validators.required],
+          isAnswer: false,
+        }),
+        this.fb.group({
+          optionText: ['', Validators.required],
+          isAnswer: false,
+        }),
+        this.fb.group({
+          optionText: ['', Validators.required],
+          isAnswer: false,
+        }),
+        this.fb.group({
+          optionText: ['', Validators.required],
+          isAnswer: false,
+        }),
       ]),
-      correctOption: ['', Validators.required],
     });
   }
 }

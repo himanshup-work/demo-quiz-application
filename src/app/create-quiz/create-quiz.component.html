@@ -15,6 +15,50 @@
             placeholder="Enter quiz title"
           />
         </div>
+        <div class="mb-3">
+          <label for="quizCategory" class="form-label">Category</label>
+          <select
+            formControlName="quizCategory"
+            id="quizCategory"
+            class="form-control"
+          >
+            <option value="">-- Not selected --</option>
+            <option value="Sports">Sports</option>
+            <option value="Science">Science</option>
+            <option value="Politics">Politics</option>
+            <option value="Maths">Maths</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="quizDescription" class="form-label">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            id="quizDescription"
+            formControlName="quizDescription"
+            placeholder="Enter Description"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="passingScore" class="form-label">Passing Marks</label>
+          <input
+            type="number"
+            class="form-control"
+            id="passingScore"
+            formControlName="passingScore"
+            placeholder="Enter passing marks"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="timeLimit" class="form-label">Time Limit</label>
+          <input
+            type="time"
+            class="form-control"
+            id="timeLimit"
+            formControlName="timeLimit"
+            placeholder="time limit"
+          />
+        </div>
         <div formArrayName="questions">
           <div
             *ngFor="let question of questionsFormArray.controls; let i = index"
@@ -22,9 +66,17 @@
             class="question-group mb-4"
           >
             <div class="card">
-              <div class="card-header">
+              <div class="card-header d-flex justify-content-between">
                 <h5>Question {{ i + 1 }}</h5>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger"
+                  (click)="removeQuestion(i)"
+                >
+                  Remove
+                </button>
               </div>
+
               <div class="card-body">
                 <label [for]="'text' + i" class="form-label"
                   >Question Text</label
@@ -36,47 +88,39 @@
                   formControlName="text"
                   placeholder="Enter your question"
                 />
+
                 <div formArrayName="options">
                   <div
-                    class="mb-2"
+                    class="input-group mb-2"
                     *ngFor="
                       let option of getOptionsFormArray(i).controls;
                       let j = index
                     "
+                    [formGroupName]="j"
                   >
-                    <div class="input-group">
-                      <div class="input-group-text">
-                        <input
-                          type="radio"
-                          [name]="'optionOfQuestion' + i"
-                          class="form-check-input"
-                          [value]="j"
-                          [formControl]="getCorrectOptionControl(i)"
-                        />
-                      </div>
+                    <div class="input-group-text">
                       <input
-                        type="text"
-                        class="form-control"
-                        [formControlName]="j"
-                        [placeholder]="'Option ' + (j + 1)"
+                        type="radio"
+                        [name]="'correctOption' + i"
+                        (change)="markCorrectAnswer(i, j)"
+                        [checked]="option.get('isAnswer')?.value"
+                        class="form-check-input"
                       />
                     </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="optionText"
+                      [placeholder]="'Option ' + (j + 1)"
+                    />
                   </div>
                 </div>
-              </div>
-              <div class="card-footer">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-danger"
-                  (click)="removeQuestion(i)"
-                >
-                  Remove Question
-                </button>
               </div>
             </div>
           </div>
         </div>
-        <div class="card-footer">
+
+        <div class="text-center mt-4">
           <button
             type="button"
             class="btn btn-secondary mx-2"

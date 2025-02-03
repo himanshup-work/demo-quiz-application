@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormsModule, NgForm } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -10,24 +10,22 @@ import { RouterLink } from '@angular/router';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
-
   userObj: any = {
-    "userId": "",
-    "fullName": "",
-    "email": "",
-    "username": "",
-    "password": "",
-    "confirmPassword": "",
-    "image": ""
-  }
-
+    userId: '',
+    fullName: '',
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+    image: '',
+  };
 
   httpClient = inject(HttpClient);
   model: any = {};
   cover!: string;
   cover_file: any;
   showError = false;
-  
+
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -43,7 +41,6 @@ export class RegisterComponent {
     }
   }
 
-
   retrievedUser: any = {};
   onSubmit(form: NgForm) {
     if (form.invalid) {
@@ -54,14 +51,12 @@ export class RegisterComponent {
       }
       return;
     } else {
-      let url = "http://localhost:8080/user/create";
-      this.httpClient
-        .post(url,this.userObj)
-        .subscribe((res: any) =>{
-          if (res.status) {
-            alert(res.message)
-          }
-        });
+      let url = 'http://localhost:8080/user/create';
+      this.httpClient.post(url, this.userObj).subscribe((res: any) => {
+        if (res.status) {
+          alert(res.message);
+        }
+      });
     }
   }
 }
