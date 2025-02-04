@@ -57,7 +57,7 @@ export class CreateQuizComponent implements OnInit {
   markCorrectAnswer(questionIndex: number, optionIndex: number) {
     const options = this.getOptionsFormArray(questionIndex);
     options.controls.forEach((optionControl, index) => {
-      optionControl.get('isAnswer')?.setValue(index === optionIndex);
+      optionControl.get('isCorrect')?.setValue(index === optionIndex);
     });
   }
 
@@ -66,8 +66,34 @@ export class CreateQuizComponent implements OnInit {
       console.log('INVALID_FORM!!!!!!!!!!!');
       console.log(this.quizForm.value);
     }
+    const formData = { ...this.quizForm.value };
+
+    // Format time to HH:mm:ss
+    if (formData.timeLimit) {
+      formData.timeLimit =
+        formData.timeLimit.includes(':') &&
+        formData.timeLimit.split(':').length === 2
+          ? `${formData.timeLimit}:00`
+          : formData.timeLimit;
+    }
+
+    const quizData = {
+      quizTitle: formData.quizTitle,
+      categoryName: formData.quizCategory,
+      quizDescription: formData.quizDescription,
+      timeLimit: formData.timeLimit,
+      passingScore: formData.passingScore,
+      questions: formData.questions.map((q: any) => ({
+        questionText: q.questionText,
+        options: q.options.map((opt: any) => ({
+          optionText: opt.optionText,
+          isCorrect: opt.isCorrect,
+        })),
+      })),
+    };
+
     let url = 'http://localhost:8080/quiz/create';
-    this.http.post('url', this.quizForm.value).subscribe((res: any) => {
+    this.http.post(url, quizData).subscribe((res: any) => {
       if (res.status) {
         alert(res.message);
       }
@@ -77,23 +103,23 @@ export class CreateQuizComponent implements OnInit {
 
   private createQuestionFormGroup(): FormGroup {
     return this.fb.group({
-      text: ['', [Validators.required, Validators.minLength(5)]],
+      questionText: ['', [Validators.required, Validators.minLength(5)]],
       options: this.fb.array([
         this.fb.group({
           optionText: ['', Validators.required],
-          isAnswer: false,
+          isCorrect: false,
         }),
         this.fb.group({
           optionText: ['', Validators.required],
-          isAnswer: false,
+          isCorrect: false,
         }),
         this.fb.group({
           optionText: ['', Validators.required],
-          isAnswer: false,
+          isCorrect: false,
         }),
         this.fb.group({
           optionText: ['', Validators.required],
-          isAnswer: false,
+          isCorrect: false,
         }),
       ]),
     });

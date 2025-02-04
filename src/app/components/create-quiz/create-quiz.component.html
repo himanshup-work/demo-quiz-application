@@ -23,10 +23,10 @@
             class="form-control"
           >
             <option value="">-- Not selected --</option>
-            <option value="Sports">Sports</option>
             <option value="Science">Science</option>
-            <option value="Politics">Politics</option>
-            <option value="Maths">Maths</option>
+            <option value="History">History</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Technology">Technology</option>
           </select>
         </div>
         <div class="mb-3">
@@ -57,6 +57,7 @@
             id="timeLimit"
             formControlName="timeLimit"
             placeholder="time limit"
+            step="1"
           />
         </div>
         <div formArrayName="questions">
@@ -78,14 +79,14 @@
               </div>
 
               <div class="card-body">
-                <label [for]="'text' + i" class="form-label"
+                <label [for]="'questionText' + i" class="form-label"
                   >Question Text</label
                 >
                 <input
                   type="text"
-                  [id]="'text' + i"
+                  [id]="'questionText' + i"
                   class="form-control mb-2"
-                  formControlName="text"
+                  formControlName="questionText"
                   placeholder="Enter your question"
                 />
 
@@ -103,7 +104,7 @@
                         type="radio"
                         [name]="'correctOption' + i"
                         (change)="markCorrectAnswer(i, j)"
-                        [checked]="option.get('isAnswer')?.value"
+                        [checked]="option.get('isCorrect')?.value"
                         class="form-check-input"
                       />
                     </div>
