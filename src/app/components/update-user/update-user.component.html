@@ -1,16 +1,16 @@
-<div class="container">
-  <div class="update-form">
-    <div class="profile-photo">
+<div class="container-fluid py-5">
+  <div class="update-form card">
+    <div class="profile-photo card-header">
       @if (cover) {
-        <img [src]="cover" alt="Profile Photo" />
+        <img [src]="cover" alt="Profile Photo" class="img-fluid rounded" />
       }@else {
         <img src="images/home-bg-image.jpg" alt="Profile Photo" />
       }
     </div>
     <hr />
-    <h2 class="form-title">Update User</h2>
+    <h2 class="form-title text-center">Update User Profile</h2>
     <hr />
-    <form [formGroup]="userForm">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" novalidate>
       <!-- Full Name -->
       <div class="mb-3">
         <label for="fullName" class="form-label">Full Name</label>
@@ -20,14 +20,15 @@
           id="fullName"
           formControlName="fullName"
           placeholder="Enter your full name"
-          required
         />
-        @if (userForm.controls['fullName'].touched &&
-        userForm.controls['fullName'].errors?.['required']) {
-        <span class="text-danger">user name is required</span>
-        }@else if (userForm.controls['fullName'].touched &&
-        userForm.controls['fullName'].errors?.['minlength']) {
-        <span class="text-danger">name must be 5 characters</span>
+        @if (userForm.get('fullName')?.invalid && 
+             (userForm.get('fullName')?.dirty || userForm.get('fullName')?.touched)) {
+          @if (userForm.get('fullName')?.errors?.['required']) {
+            <div class="text-danger">Full name is required</div>
+          }
+          @if (userForm.get('fullName')?.errors?.['minlength']) {
+            <div class="text-danger">Name must be at least 5 characters</div>
+          }
         }
       </div>
 
@@ -40,14 +41,15 @@
           id="email"
           formControlName="email"
           placeholder="Enter your email"
-          required
         />
-        @if (userForm.controls['email'].touched &&
-        userForm.controls['email'].errors?.['required']) {
-        <span class="text-danger">email is required</span>
-        }@else if (userForm.controls['email'].touched &&
-        userForm.controls['email'].errors?.['email']) {
-        <span class="text-danger">please enter a valid email</span>
+        @if (userForm.get('email')?.invalid && 
+             (userForm.get('email')?.dirty || userForm.get('email')?.touched)) {
+          @if (userForm.get('email')?.errors?.['required']) {
+            <div class="text-danger">Email is required</div>
+          }
+          @if (userForm.get('email')?.errors?.['email']) {
+            <div class="text-danger">Please enter a valid email</div>
+          }
         }
       </div>
 
@@ -60,14 +62,15 @@
           id="username"
           formControlName="username"
           placeholder="Enter your username"
-          required
         />
-        @if (userForm.controls['username'].touched &&
-        userForm.controls['username'].errors?.['required']) {
-        <span class="text-danger">username is required</span>
-        }@else if (userForm.controls['username'].touched &&
-        userForm.controls['username'].errors?.['minlength']) {
-        <span class="text-danger">user name must be 5 characters</span>
+        @if (userForm.get('username')?.invalid && 
+             (userForm.get('username')?.dirty || userForm.get('username')?.touched)) {
+          @if (userForm.get('username')?.errors?.['required']) {
+            <div class="text-danger">Username is required</div>
+          }
+          @if (userForm.get('username')?.errors?.['minlength']) {
+            <div class="text-danger">Username must be at least 5 characters</div>
+          }
         }
       </div>
 
@@ -81,34 +84,39 @@
           formControlName="password"
           placeholder="Enter a new password"
         />
-        @if (userForm.controls['password'].touched &&
-        userForm.controls['password'].errors?.['required']) {
-        <span class="text-danger">password is required</span>
-        }@else if (userForm.controls['password'].touched &&
-        userForm.controls['password'].errors?.['minlength']) {
-        <span class="text-danger">password must be 6 characters</span>
+        @if (userForm.get('password')?.invalid && 
+             (userForm.get('password')?.dirty || userForm.get('password')?.touched)) {
+          @if (userForm.get('password')?.errors?.['required']) {
+            <div class="text-danger">Password is required</div>
+          }
+          @if (userForm.get('password')?.errors?.['minlength']) {
+            <div class="text-danger">Password must be at least 6 characters</div>
+          }
         }
       </div>
 
+      <!-- Profile Image -->
       <div class="mb-3">
-        <label for="profileImage" class="form-label">Choose an Image</label>
+        <label for="profileImage" class="form-label">Profile Image</label>
         <input
           type="file"
           class="form-control"
           id="profileImage"
           formControlName="profileImage"
           accept="image/*"
-          [multiple]="false"
           (change)="onFileSelected($event)"
-          required
         />
         @if (showError) {
-        <p class="text-danger">image is required</p>
+          <div class="text-danger">Profile image is required</div>
         }
       </div>
 
-      <button type="submit" class="btn btn-primary w-100" (click)="onSubmit()">
-        Update
+      <button 
+        type="submit" 
+        class="btn btn-primary w-100" 
+        [disabled]="userForm.invalid"
+      >
+        Update Profile
       </button>
     </form>
   </div>

@@ -1,6 +1,12 @@
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1030; /* Ensure it stays on top */
+.navbar-brand {
+  background-image: url("../../../../public/images/nav-icon.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 48px;
+  height: 48px;
 }
+
+/* .navbar-nav .nav-item:hover {
+  background-color: rgba(180, 190, 203, 0.4);
+} */
