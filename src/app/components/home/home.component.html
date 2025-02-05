@@ -25,7 +25,7 @@
           type="text"
           class="form-control search-input"
           placeholder="Search quizzes....."
-          [(ngModel)]="searchText"
+          [formControl]="searchControl"
         />
         <mat-icon class="search-icon">search</mat-icon>
       </div>
@@ -37,13 +37,52 @@
         <select
           class="form-select category-select"
           [(ngModel)]="selectedCategory"
+          (change)="onCategoryChange($event)"
         >
           <option value="" selected>Categories</option>
-          <option *ngFor="let category of categories" [value]="category.value">
+          <option *ngFor="let category of categories" [value]="category.id">
             {{ category.name }}
           </option>
         </select>
       </div>
     </div>
+  </div>
+  <div class="row">
+    <div *ngFor="let quiz of filteredQuizzes;" class="col-md-6 my-3 px-3">
+      <mat-card class="quiz-card">
+        <mat-card-header>
+          <mat-card-title class="text-center">{{ quiz.quizTitle }}</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content class="p-3">
+          <p class="text-muted mb-3">{{ quiz.quizDescription }}</p>
+          
+          <div class="quiz-details d-flex flex-wrap justify-content-between">
+            <div class="detail-item d-flex align-items-center mb-2">
+              <mat-icon class="me-2">check_circle_outline</mat-icon>
+              <span>Passing Score: {{ quiz.passingScore }}</span>
+            </div>
+            
+            <div class="detail-item d-flex align-items-center mb-2">
+              <mat-icon class="me-2">schedule</mat-icon>
+              <span>Time Limit: {{ quiz.timeLimit }}</span>
+            </div>
+            
+            <div class="detail-item d-flex align-items-center mb-2">
+              <mat-icon class="me-2">help_outline</mat-icon>
+              <span>Questions: 15</span>
+            </div>
+          </div>
+        </mat-card-content>
+        
+        <mat-card-footer>
+          <div class="text-center pb-3">
+            <button class="btn btn-secondary px-5 py-2" color="primary" routerLink="">Start Quiz</button>
+          </div>
+        </mat-card-footer>
+      </mat-card>
+  
+    </div>
+    
   </div>
 </div>
