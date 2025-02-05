@@ -1,5 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -13,26 +18,30 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private router = inject(Router);
-  
+
   showPassword = false;
   isLoading = false;
   loginError = '';
 
   userForm: FormGroup = this.fb.group({
-    email: ['', [
-      Validators.required,
-      Validators.email,
-      Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
-    ]],
-    password: ['', [
-      Validators.required,
-      Validators.minLength(8)
-    ]]
+    email: [
+      '',
+      [
+        Validators.required,
+        Validators.email,
+        Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+      ],
+    ],
+    password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
   // Getter methods for easy form access in template
-  get email() { return this.userForm.get('email'); }
-  get password() { return this.userForm.get('password'); }
+  get email() {
+    return this.userForm.get('email');
+  }
+  get password() {
+    return this.userForm.get('password');
+  }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -64,7 +73,8 @@ export class LoginComponent {
     this.loginError = '';
 
     // Replace with your actual API endpoint
-    this.http.post('http://localhost:8080/auth/login', this.userForm.value)
+    this.http
+      .post('http://localhost:8080/auth/login', this.userForm.value)
       .subscribe({
         next: (response: any) => {
           if (response.status) {
@@ -80,7 +90,7 @@ export class LoginComponent {
         },
         complete: () => {
           this.isLoading = false;
-        }
+        },
       });
   }
 }

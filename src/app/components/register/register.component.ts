@@ -21,12 +21,12 @@ export class RegisterComponent {
     username: '',
     password: '',
     confirmPassword: '',
-    image: ''
+    image: '',
   };
 
   private httpClient = inject(HttpClient);
   private router = inject(Router);
-  
+
   cover: string | null = null;
   coverFile: File | null = null;
   showError = false;
@@ -36,17 +36,17 @@ export class RegisterComponent {
   onFileSelected(event: Event): void {
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0];
-    
+
     if (file) {
       this.coverFile = file;
       const reader = new FileReader();
-      
+
       reader.onload = () => {
         const dataUrl = reader.result as string;
         this.userObj.image = dataUrl.split(',')[1];
         this.cover = dataUrl;
       };
-      
+
       reader.readAsDataURL(file);
       this.showError = false;
     }
@@ -70,22 +70,21 @@ export class RegisterComponent {
     this.isLoading = true;
     const url = 'http://localhost:8080/user/create';
 
-    this.httpClient.post<IApiResponse>(url, this.userObj)
-      .subscribe({
-        next: (response) => {
-          if (response.status) {
-            alert(response.message);
-            this.router.navigate(['/login']);
-          }
-        },
-        error: (error) => {
-          console.error('Registration error:', error);
-          alert('Registration failed. Please try again.');
-        },
-        complete: () => {
-          this.isLoading = false;
+    this.httpClient.post<IApiResponse>(url, this.userObj).subscribe({
+      next: (response) => {
+        if (response.status) {
+          alert(response.message);
+          this.router.navigate(['/login']);
         }
-      });
+      },
+      error: (error) => {
+        console.error('Registration error:', error);
+        alert('Registration failed. Please try again.');
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 
   togglePasswordVisibility(): void {

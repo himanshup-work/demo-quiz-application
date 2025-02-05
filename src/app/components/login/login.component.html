@@ -5,10 +5,14 @@
     </div>
     <div class="card-body px-4">
       @if(loginError) {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          {{ loginError }}
-          <button type="button" class="btn-close" (click)="loginError = ''"></button>
-        </div>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ loginError }}
+        <button
+          type="button"
+          class="btn-close"
+          (click)="loginError = ''"
+        ></button>
+      </div>
       }
 
       <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
@@ -25,9 +29,9 @@
             autocomplete="email"
           />
           @if (email?.invalid && email?.touched) {
-            <div class="invalid-feedback">
-              {{ getErrorMessage('email') }}
-            </div>
+          <div class="invalid-feedback">
+            {{ getErrorMessage("email") }}
+          </div>
           }
         </div>
 
@@ -44,43 +48,52 @@
               placeholder="Enter your password"
               autocomplete="current-password"
             />
-            <button 
-              class="btn btn-light" 
+            <button
+              class="btn btn-light"
               type="button"
               (click)="togglePasswordVisibility()"
             >
-              <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
-          </button>
+              <i
+                class="bi"
+                [class.bi-eye]="!showPassword"
+                [class.bi-eye-slash]="showPassword"
+              ></i>
+            </button>
             @if (password?.invalid && password?.touched) {
-              <div class="invalid-feedback">
-                {{ getErrorMessage('password') }}
-              </div>
+            <div class="invalid-feedback">
+              {{ getErrorMessage("password") }}
+            </div>
             }
           </div>
           <div class="form-text text-end">
-            <a routerLink="/forgot-password" class="text-decoration-none">Forgot Password?</a>
+            <a routerLink="/forgot-password" class="text-decoration-none"
+              >Forgot Password?</a
+            >
           </div>
         </div>
 
         <!-- Submit Button -->
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           class="btn btn-primary w-100 py-2"
           [disabled]="userForm.invalid || isLoading"
         >
           @if(isLoading) {
-            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            Logging in...
-          } @else {
-            Login
-          }
+          <span
+            class="spinner-border spinner-border-sm me-2"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Logging in... } @else { Login }
         </button>
 
         <!-- Link to Sign Up -->
         <div class="text-center mt-4">
           <p class="mb-0">
-            Don't have an account? 
-            <a routerLink="/register" class="text-primary text-decoration-none">Sign Up</a>
+            Don't have an account?
+            <a routerLink="/register" class="text-primary text-decoration-none"
+              >Sign Up</a
+            >
           </p>
         </div>
       </form>
