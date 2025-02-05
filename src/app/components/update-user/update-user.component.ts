@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import {
+  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -14,59 +15,53 @@ import {
   styleUrl: './update-user.component.css',
 })
 export class UpdateUserComponent implements OnInit {
-  httpClient = inject(HttpClient);
 
-  userForm: FormGroup = new FormGroup({
-    fullName: new FormControl('', [
-      Validators.required,
-      Validators.minLength(5),
-    ]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    username: new FormControl('', [
-      Validators.required,
-      Validators.minLength(5),
-    ]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(6),
-    ]),
-    profileImage: new FormControl('', [Validators.required]),
-  });
+  profileForm: FormGroup;
+  imagePreview: string | null = null;
 
-  cover: any;
-  cover_file: any;
-  showError = false;
-
-  ngOnInit(): void {
-    let url = 'http://localhost:8080/user/926312db-4157-4027-a21d-b241d8b0277f';
-    this.httpClient.get(url).subscribe((res: any) => {
-      this.userForm.controls['fullName'].setValue(res.data.fullName);
-      this.userForm.controls['email'].setValue(res.data.email);
-      this.userForm.controls['username'].setValue(res.data.username);
-      this.userForm.controls['password'].setValue(res.data.password);
-      this.cover = 'data:image/jpeg;base64,' + res.data.image;
+  constructor(private fb: FormBuilder) {
+    this.profileForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      username: ['', Validators.required],
+      bio: [''],
+      profileImage: [null]
     });
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
+  ngOnInit(): void {
+    // Load user data from service (mock data for now)
+    const userData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+      username: 'john12345',
+      bio: 'Quiz enthusiast and lifelong learner'
+    };
+    this.profileForm.patchValue(userData);
+  }
+
+  onFileSelect(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
-      this.cover_file = file;
+      this.profileForm.patchValue({ profileImage: file });
+      
+      // Create image preview
       const reader = new FileReader();
       reader.onload = () => {
-        const dataUrl = reader.result!.toString();
-        this.cover = dataUrl;
+        this.imagePreview = reader.result as string;
       };
       reader.readAsDataURL(file);
-      this.showError = false;
     }
   }
-  formValue: any;
 
-  onSubmit() {
-    if (this.userForm.invalid || this.userForm.dirty) {
-      this.userForm.markAllAsTouched();
+  onSubmit(): void {
+    if (this.profileForm.valid) {
+      console.log('Form data:', this.profileForm.value);
+      // Add your API call here to update user profile
     }
-    this.formValue = this.userForm.value;
   }
 }
+
+

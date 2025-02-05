@@ -1,123 +1,113 @@
-<div class="container-fluid py-5">
-  <div class="update-form card">
-    <div class="profile-photo card-header">
-      @if (cover) {
-        <img [src]="cover" alt="Profile Photo" class="img-fluid rounded" />
-      }@else {
-        <img src="images/home-bg-image.jpg" alt="Profile Photo" />
-      }
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="card">
+        <div class="card-header bg-secondary text-white p-3">
+          <h3 class="mb-0 text-center">User Profile</h3>
+        </div>
+        <div class="card-body px-5">
+          <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+            <div class="row mb-4">
+              <div class="col-12 text-center mb-4">
+                <div class="profile-image-container">
+                  <img [src]="imagePreview || 'images/profile.png'" 
+                       class="rounded-circle profile-image" 
+                       alt="Profile Image">
+                  <div class="image-upload">
+                    <label for="profileImage" class="btn btn-outline-primary btn-sm">
+                      Change Photo
+                    </label>
+                    <input type="file" 
+                           id="profileImage" 
+                           accept="image/*" 
+                           (change)="onFileSelect($event)" 
+                           class="d-none">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-group mb-3">
+                  <label for="firstName">First Name</label>
+                  <input type="text" 
+                         class="form-control" 
+                         id="firstName" 
+                         formControlName="firstName"
+                         [class.is-invalid]="profileForm.get('firstName')?.invalid && 
+                                          profileForm.get('firstName')?.touched">
+                  <div class="invalid-feedback">
+                    First name is required
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-group mb-3">
+                  <label for="lastName">Last Name</label>
+                  <input type="text" 
+                         class="form-control" 
+                         id="lastName" 
+                         formControlName="lastName"
+                         [class.is-invalid]="profileForm.get('lastName')?.invalid && 
+                                          profileForm.get('lastName')?.touched">
+                  <div class="invalid-feedback">
+                    Last name is required
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-group mb-3">
+                  <label for="email">Email</label>
+                  <input type="email" 
+                         class="form-control" 
+                         id="email" 
+                         formControlName="email"
+                         [class.is-invalid]="profileForm.get('email')?.invalid && 
+                                          profileForm.get('email')?.touched">
+                  <div class="invalid-feedback">
+                    Please enter a valid email
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-group mb-3">
+                  <label for="username">Username</label>
+                  <input type="text" 
+                         class="form-control" 
+                         id="username" 
+                         formControlName="username"
+                         [class.is-invalid]="profileForm.get('username')?.invalid && 
+                                          profileForm.get('username')?.touched">
+                  <div class="invalid-feedback">
+                    Please enter valid username
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-12">
+                <div class="form-group mb-3">
+                  <label for="bio">Bio</label>
+                  <textarea class="form-control" 
+                          id="bio" 
+                          rows="3" 
+                          formControlName="bio">
+                  </textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="text-center">
+              <button type="submit" 
+                      class="btn btn-primary btn-lg"
+                      [disabled]="!profileForm.valid">
+                Update Profile
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    <hr />
-    <h2 class="form-title text-center">Update User Profile</h2>
-    <hr />
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" novalidate>
-      <!-- Full Name -->
-      <div class="mb-3">
-        <label for="fullName" class="form-label">Full Name</label>
-        <input
-          type="text"
-          class="form-control"
-          id="fullName"
-          formControlName="fullName"
-          placeholder="Enter your full name"
-        />
-        @if (userForm.get('fullName')?.invalid && 
-             (userForm.get('fullName')?.dirty || userForm.get('fullName')?.touched)) {
-          @if (userForm.get('fullName')?.errors?.['required']) {
-            <div class="text-danger">Full name is required</div>
-          }
-          @if (userForm.get('fullName')?.errors?.['minlength']) {
-            <div class="text-danger">Name must be at least 5 characters</div>
-          }
-        }
-      </div>
-
-      <!-- Email Address -->
-      <div class="mb-3">
-        <label for="email" class="form-label">Email Address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          formControlName="email"
-          placeholder="Enter your email"
-        />
-        @if (userForm.get('email')?.invalid && 
-             (userForm.get('email')?.dirty || userForm.get('email')?.touched)) {
-          @if (userForm.get('email')?.errors?.['required']) {
-            <div class="text-danger">Email is required</div>
-          }
-          @if (userForm.get('email')?.errors?.['email']) {
-            <div class="text-danger">Please enter a valid email</div>
-          }
-        }
-      </div>
-
-      <!-- Username -->
-      <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input
-          type="text"
-          class="form-control"
-          id="username"
-          formControlName="username"
-          placeholder="Enter your username"
-        />
-        @if (userForm.get('username')?.invalid && 
-             (userForm.get('username')?.dirty || userForm.get('username')?.touched)) {
-          @if (userForm.get('username')?.errors?.['required']) {
-            <div class="text-danger">Username is required</div>
-          }
-          @if (userForm.get('username')?.errors?.['minlength']) {
-            <div class="text-danger">Username must be at least 5 characters</div>
-          }
-        }
-      </div>
-
-      <!-- Password -->
-      <div class="mb-3">
-        <label for="password" class="form-label">New Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="password"
-          formControlName="password"
-          placeholder="Enter a new password"
-        />
-        @if (userForm.get('password')?.invalid && 
-             (userForm.get('password')?.dirty || userForm.get('password')?.touched)) {
-          @if (userForm.get('password')?.errors?.['required']) {
-            <div class="text-danger">Password is required</div>
-          }
-          @if (userForm.get('password')?.errors?.['minlength']) {
-            <div class="text-danger">Password must be at least 6 characters</div>
-          }
-        }
-      </div>
-
-      <!-- Profile Image -->
-      <div class="mb-3">
-        <label for="profileImage" class="form-label">Profile Image</label>
-        <input
-          type="file"
-          class="form-control"
-          id="profileImage"
-          formControlName="profileImage"
-          accept="image/*"
-          (change)="onFileSelected($event)"
-        />
-        @if (showError) {
-          <div class="text-danger">Profile image is required</div>
-        }
-      </div>
-
-      <button 
-        type="submit" 
-        class="btn btn-primary w-100" 
-        [disabled]="userForm.invalid"
-      >
-        Update Profile
-      </button>
-    </form>
   </div>
 </div>

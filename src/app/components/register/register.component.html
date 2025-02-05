@@ -1,30 +1,83 @@
 <div class="container-fluid py-5">
   <div class="signup-form card">
-    <div class="card-header py-4">
-      <h2 class="form-title text-center">Sign Up for the Quiz</h2>
+    <div class="card-header bg-secondary py-3">
+      <h2 class="form-title text-center" style="font-weight: bold;">Sign Up for the Quiz</h2>
     </div>
     <div class="card-body px-5">
       <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
-        <!-- Full Name -->
+        <!-- Profile Image Section -->
+        <div class="text-center mb-4">
+          <div class="profile-image-container">
+            <img 
+              [src]="cover || 'images/profile.png'" 
+              class="profile-image"
+              alt="Profile Image"
+            />
+            <div class="image-upload mt-2">
+              <label for="image" class="btn btn-outline-primary btn-sm">
+                Choose Profile Photo
+              </label>
+              <input
+                type="file"
+                class="d-none"
+                id="image"
+                name="image"
+                accept="image/*"
+                [multiple]="false"
+                (change)="onFileSelected($event)"
+                ngModel
+              />
+            </div>
+            @if (showError) {
+              <p class="text-danger mt-1">Profile image is required</p>
+            }
+          </div>
+        </div>
+
+        <!-- First Name -->
         <div class="mb-3">
-          <label for="fullName" class="form-label">Full Name</label>
+          <label for="firstName" class="form-label">First Name</label>
           <input
             type="text"
             class="form-control"
-            id="fullName"
-            name="fullName"
-            #fullName="ngModel"
-            [(ngModel)]="userObj.fullName"
-            placeholder="Enter your full name"
+            id="firstName"
+            name="firstName"
+            #firstName="ngModel"
+            [(ngModel)]="userObj.firstName"
+            placeholder="Enter your first name"
             required
             minlength="2"
           />
-          @if(fullName.touched && fullName.invalid) {
-            @if(fullName.errors?.['required']) {
-              <p class="text-danger">Full name is required</p>
+          @if(firstName.touched && firstName.invalid) {
+            @if(firstName.errors?.['required']) {
+              <p class="text-danger">First name is required</p>
             }
-            @if(fullName.errors?.['minlength']) {
-              <p class="text-danger">Full name must be at least 2 characters long</p>
+            @if(firstName.errors?.['minlength']) {
+              <p class="text-danger">First name must be at least 2 characters long</p>
+            }
+          }
+        </div>
+
+        <!-- Last Name -->
+        <div class="mb-3">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastName"
+            name="lastName"
+            #lastName="ngModel"
+            [(ngModel)]="userObj.lastName"
+            placeholder="Enter your last name"
+            required
+            minlength="2"
+          />
+          @if(lastName.touched && lastName.invalid) {
+            @if(lastName.errors?.['required']) {
+              <p class="text-danger">Last name is required</p>
+            }
+            @if(lastName.errors?.['minlength']) {
+              <p class="text-danger">Last name must be at least 2 characters long</p>
             }
           }
         </div>
@@ -124,29 +177,6 @@
           />
           @if(confirmPassword.touched && confirmPassword.invalid) {
             <p class="text-danger">Passwords do not match</p>
-          }
-        </div>
-
-        <!-- Choose an image -->
-        <div class="mb-3">
-          <label for="image" class="form-label">Choose an Image</label>
-          <input
-            type="file"
-            class="form-control"
-            id="image"
-            name="image"
-            accept="image/*"
-            [multiple]="false"
-            (change)="onFileSelected($event)"
-            ngModel
-          />
-          @if(cover){
-            <div class="imgDiv text-end mt-2">
-              <img [src]="cover" class="img-fluid" alt="Selected image" />
-            </div>
-          }
-          @if (showError) {
-            <p class="text-danger">Image is required</p>
           }
         </div>
 

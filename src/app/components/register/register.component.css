@@ -4,18 +4,40 @@
   background-color: rgba(179, 173, 173, 0.7);
   border-radius: 8px;
 }
-.form-title {
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
+
 .text-danger {
   font-size: 0.8rem;
 }
-.imgDiv {
-  img {
-    width: 40px;
-    height: 50px;
-    margin-top: -50px;
-  }
+
+.profile-image-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.image-upload {
+  margin-top: 1rem;
+}
+
+.btn-outline-primary {
+  border-width: 2px;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.form-control:focus {
+  border-color: #3f4244;
+  box-shadow: 0 0 0 0.2rem rgba(78, 79, 80, 0.25);
 }

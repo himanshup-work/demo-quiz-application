@@ -1,4 +1,4 @@
-.update-form {
+/* .update-form {
     max-width: 600px;
     margin: 50px auto;
     background-color: rgba(179, 173, 173, 0.7);
@@ -23,4 +23,40 @@
 }
 .profile-photo input {
     display: none;
-}
+} */
+.profile-image-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .image-upload {
+    margin-top: 1rem;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 15px;
+    background-color: rgba(179, 173, 173, 0.7);
+  }
+  
+  .card-header {
+    border-radius: 15px 15px 0 0 !important;
+  }
+
+  .form-control:focus {
+    border-color: #3f4244;
+    box-shadow: 0 0 0 0.2rem rgba(78, 79, 80, 0.25);
+  }
+  
+  .btn-primary {
+    padding: 0.75rem 2rem;
+  }

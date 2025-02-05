@@ -12,7 +12,8 @@ import { RouterLink } from '@angular/router';
 export class RegisterComponent {
   userObj: any = {
     userId: '',
-    fullName: '',
+    firstName: '',
+    lastName: '',
     email: '',
     username: '',
     password: '',
@@ -33,8 +34,8 @@ export class RegisterComponent {
       const reader = new FileReader();
       reader.onload = () => {
         const dataUrl = reader.result as string;
-        this.userObj.image = dataUrl.split(',')[1]; // Remove the metadata part of the Base64 string
-        this.cover = dataUrl; // For preview purposes
+        this.userObj.image = dataUrl.split(',')[1];
+        this.cover = dataUrl;
       };
       reader.readAsDataURL(file);
       this.showError = false;
