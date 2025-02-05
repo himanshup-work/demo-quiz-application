@@ -1,5 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
-* {
+body {
+  background-image: url('../public/images/home-bg-image.jpg'); /* Place the image in src/assets/ */
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* Keeps the image fixed during scroll */
+  background-position: center;
   margin: 0;
   padding: 0;
 }

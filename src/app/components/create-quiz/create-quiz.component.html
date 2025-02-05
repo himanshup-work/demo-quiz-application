@@ -1,0 +1,139 @@
+<div class="container my-5">
+  <div class="create-quiz-form card">
+    <div class="card-header">
+      <h2 class="form-title">Create Quiz</h2>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="quizTitle" class="form-label">Quiz Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="quizTitle"
+            formControlName="quizTitle"
+            placeholder="Enter quiz title"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="quizCategory" class="form-label">Category</label>
+          <select
+            formControlName="quizCategory"
+            id="quizCategory"
+            class="form-control"
+          >
+            <option value="">-- Not selected --</option>
+            <option value="Science">Science</option>
+            <option value="History">History</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Technology">Technology</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="quizDescription" class="form-label">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            id="quizDescription"
+            formControlName="quizDescription"
+            placeholder="Enter Description"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="passingScore" class="form-label">Passing Marks</label>
+          <input
+            type="number"
+            class="form-control"
+            id="passingScore"
+            formControlName="passingScore"
+            placeholder="Enter passing marks"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="timeLimit" class="form-label">Time Limit</label>
+          <input
+            type="time"
+            class="form-control"
+            id="timeLimit"
+            formControlName="timeLimit"
+            placeholder="time limit"
+            step="1"
+          />
+        </div>
+        <div formArrayName="questions">
+          <div
+            *ngFor="let question of questionsFormArray.controls; let i = index"
+            [formGroupName]="i"
+            class="question-group mb-4"
+          >
+            <div class="card">
+              <div class="card-header d-flex justify-content-between">
+                <h5>Question {{ i + 1 }}</h5>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger"
+                  (click)="removeQuestion(i)"
+                >
+                  Remove
+                </button>
+              </div>
+
+              <div class="card-body">
+                <label [for]="'questionText' + i" class="form-label"
+                  >Question Text</label
+                >
+                <input
+                  type="text"
+                  [id]="'questionText' + i"
+                  class="form-control mb-2"
+                  formControlName="questionText"
+                  placeholder="Enter your question"
+                />
+
+                <div formArrayName="options">
+                  <div
+                    class="input-group mb-2"
+                    *ngFor="
+                      let option of getOptionsFormArray(i).controls;
+                      let j = index
+                    "
+                    [formGroupName]="j"
+                  >
+                    <div class="input-group-text">
+                      <input
+                        type="radio"
+                        [name]="'correctOption' + i"
+                        (change)="markCorrectAnswer(i, j)"
+                        [checked]="option.get('isCorrect')?.value"
+                        class="form-check-input"
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="optionText"
+                      [placeholder]="'Option ' + (j + 1)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button
+            type="button"
+            class="btn btn-secondary mx-2"
+            (click)="addQuestion()"
+          >
+            Add Question
+          </button>
+          <button type="submit" class="btn btn-primary mx-2">
+            Create Quiz
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
