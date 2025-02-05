@@ -21,7 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class NavbarComponent {
   isLoggedIn = true; // Replace with actual auth service
-  isSidebarOpen = true;
+  isSidebarOpen = false;
   userName = 'John Doe'; // Replace with actual user data
   userEmail = 'john@example.com'; // Replace with actual user data
   userAvatar = 'images/profile.png'; // Replace with actual user avatar
