@@ -7,6 +7,10 @@ import {
 } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth/auth.service';
+import { IAuthRequest } from '../../model/auth.model';
+import { StorageService } from '../../services/storage/storage.service';
+import { ILoggedInUser } from '../../model/user.model';
 
 @Component({
   selector: 'app-login',
@@ -16,8 +20,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
-  private http = inject(HttpClient);
   private router = inject(Router);
+  private authService = inject(AuthService);
+  private storageService = inject(StorageService);
 
   showPassword = false;
   isLoading = false;
@@ -72,25 +77,31 @@ export class LoginComponent {
     this.isLoading = true;
     this.loginError = '';
 
-    // Replace with your actual API endpoint
-    this.http
-      .post('http://localhost:8080/auth/login', this.userForm.value)
-      .subscribe({
-        next: (response: any) => {
-          if (response.status) {
-            // Handle successful login (e.g., store token, redirect)
-            this.router.navigate(['/dashboard']);
-          } else {
-            this.loginError = 'Invalid credentials';
-          }
-        },
-        error: (error) => {
-          this.loginError = 'An error occurred during login. Please try again.';
-          console.error('Login error:', error);
-        },
-        complete: () => {
-          this.isLoading = false;
-        },
-      });
+    const authRequest: IAuthRequest = {
+      ...this.userForm.value
+    };
+
+    this.authService.login(authRequest).subscribe({
+      next: (response: any) => {
+        if (response.status) {
+          this.storageService.saveToken(response.data.token);
+          const user: ILoggedInUser = {
+            userId: response.data.userId,
+            userRole: response.data.userRole
+          };
+          this.storageService.saveLoggedInUser(user);
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.loginError = 'Invalid credentials';
+        }
+      },
+      error: (error) => {
+        this.loginError = 'An error occurred during login. Please try again.';
+        // console.error('Login error:', error);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 }

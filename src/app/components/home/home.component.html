@@ -37,7 +37,7 @@
         <select
           class="form-select category-select"
           [(ngModel)]="selectedCategory"
-          (change)="onCategoryChange($event)"
+          (change)="onCategoryChange(selectedCategory)"
         >
           <option value="" selected>Categories</option>
           <option *ngFor="let category of categories" [value]="category.id">

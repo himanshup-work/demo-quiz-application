@@ -1,20 +1,14 @@
 <div class="container-fluid py-5">
   <div class="signup-form card">
     <div class="card-header bg-secondary py-3">
-      <h2 class="form-title text-center" style="font-weight: bold">
-        Sign Up for the Quiz
-      </h2>
+      <h2 class="form-title text-center" style="font-weight: bold">Sign Up for the Quiz</h2>
     </div>
     <div class="card-body px-5">
-      <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <!-- Profile Image Section -->
         <div class="text-center mb-4">
           <div class="profile-image-container">
-            <img
-              [src]="cover || 'images/profile.png'"
-              class="profile-image"
-              alt="Profile Image"
-            />
+            <img [src]="cover || 'images/profile.png'" class="profile-image" alt="Profile Image" />
             <div class="image-upload mt-2">
               <label for="image" class="btn btn-outline-primary btn-sm">
                 Choose Profile Photo
@@ -27,11 +21,10 @@
                 accept="image/*"
                 [multiple]="false"
                 (change)="onFileSelected($event)"
-                ngModel
               />
             </div>
             @if (showError) {
-            <p class="text-danger mt-1">Profile image is required</p>
+              <p class="text-danger mt-1">Profile image is required</p>
             }
           </div>
         </div>
@@ -43,21 +36,12 @@
             type="text"
             class="form-control"
             id="firstName"
-            name="firstName"
-            #firstName="ngModel"
-            [(ngModel)]="userObj.firstName"
+            formControlName="firstName"
             placeholder="Enter your first name"
-            required
-            minlength="2"
           />
-          @if(firstName.touched && firstName.invalid) {
-          @if(firstName.errors?.['required']) {
-          <p class="text-danger">First name is required</p>
-          } @if(firstName.errors?.['minlength']) {
-          <p class="text-danger">
-            First name must be at least 2 characters long
-          </p>
-          } }
+          @if(registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid) {
+            <p class="text-danger">{{ getErrorMessage('firstName') }}</p>
+          }
         </div>
 
         <!-- Last Name -->
@@ -67,21 +51,12 @@
             type="text"
             class="form-control"
             id="lastName"
-            name="lastName"
-            #lastName="ngModel"
-            [(ngModel)]="userObj.lastName"
+            formControlName="lastName"
             placeholder="Enter your last name"
-            required
-            minlength="2"
           />
-          @if(lastName.touched && lastName.invalid) {
-          @if(lastName.errors?.['required']) {
-          <p class="text-danger">Last name is required</p>
-          } @if(lastName.errors?.['minlength']) {
-          <p class="text-danger">
-            Last name must be at least 2 characters long
-          </p>
-          } }
+          @if(registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid) {
+            <p class="text-danger">{{ getErrorMessage('lastName') }}</p>
+          }
         </div>
 
         <!-- Email Address -->
@@ -91,19 +66,12 @@
             type="email"
             class="form-control"
             id="email"
-            name="email"
-            #email="ngModel"
-            [(ngModel)]="userObj.email"
+            formControlName="email"
             placeholder="Enter your email"
-            required
-            email
           />
-          @if(email.touched && email.invalid) { @if(email.errors?.['required'])
-          {
-          <p class="text-danger">Email is required</p>
-          } @if(email.errors?.['email']) {
-          <p class="text-danger">Please enter a valid email address</p>
-          } }
+          @if(registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
+            <p class="text-danger">{{ getErrorMessage('email') }}</p>
+          }
         </div>
 
         <!-- Username -->
@@ -113,22 +81,12 @@
             type="text"
             class="form-control"
             id="username"
-            name="username"
-            #username="ngModel"
-            [(ngModel)]="userObj.username"
+            formControlName="username"
             placeholder="Choose a username"
-            required
-            minlength="4"
-            maxlength="20"
           />
-          @if(username.touched && username.invalid) {
-          @if(username.errors?.['required']) {
-          <p class="text-danger">Username is required</p>
-          } @if(username.errors?.['minlength']) {
-          <p class="text-danger">Username must be at least 4 characters long</p>
-          } @if(username.errors?.['maxlength']) {
-          <p class="text-danger">Username cannot exceed 20 characters</p>
-          } }
+          @if(registerForm.get('username')?.touched && registerForm.get('username')?.invalid) {
+            <p class="text-danger">{{ getErrorMessage('username') }}</p>
+          }
         </div>
 
         <!-- Password -->
@@ -139,13 +97,8 @@
               [type]="showPassword ? 'text' : 'password'"
               class="form-control"
               id="password"
-              name="password"
-              #password="ngModel"
-              [(ngModel)]="userObj.password"
+              formControlName="password"
               placeholder="Create a password"
-              required
-              minlength="8"
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
             />
             <button
               class="btn btn-light"
@@ -158,39 +111,25 @@
                 [class.bi-eye-slash]="showPassword"
               ></i>
             </button>
-            @if(password.touched && password.invalid) {
-            @if(password.errors?.['required']) {
-            <p class="text-danger">Password is required</p>
-            } @if(password.errors?.['minlength']) {
-            <p class="text-danger">
-              Password must be at least 8 characters long
-            </p>
-            } @if(password.errors?.['pattern']) {
-            <p class="text-danger">
-              Password must include uppercase, lowercase, number, and special
-              character
-            </p>
-            } }
           </div>
+          @if(registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+            <p class="text-danger">{{ getErrorMessage('password') }}</p>
+          }
         </div>
 
         <!-- Confirm Password -->
         <div class="mb-3">
-          <label for="confirmPassword" class="form-label"
-            >Confirm Password</label
-          >
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
           <input
             type="password"
             class="form-control"
             id="confirmPassword"
-            name="confirmPassword"
-            #confirmPassword="ngModel"
-            [(ngModel)]="userObj.confirmPassword"
+            formControlName="confirmPassword"
             placeholder="Confirm your password"
-            required
           />
-          @if(confirmPassword.touched && confirmPassword.invalid) {
-          <p class="text-danger">Passwords do not match</p>
+          @if(registerForm.get('confirmPassword')?.touched && 
+              (registerForm.get('confirmPassword')?.invalid || registerForm.hasError('mismatch'))) {
+            <p class="text-danger">Passwords do not match</p>
           }
         </div>
 
@@ -198,9 +137,9 @@
         <button
           type="submit"
           class="btn btn-primary w-100"
-          [disabled]="!registerForm.form.valid"
+          [disabled]="registerForm.invalid || isLoading"
         >
-          Sign Up
+          {{ isLoading ? 'Signing up...' : 'Sign Up' }}
         </button>
 
         <!-- Already registered -->
