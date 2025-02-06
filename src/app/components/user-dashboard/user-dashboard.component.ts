@@ -7,12 +7,12 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   selector: 'app-user-dashboard',
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './user-dashboard.component.html',
-  styleUrl: './user-dashboard.component.css'
+  styleUrl: './user-dashboard.component.css',
 })
 export class UserDashboardComponent {
   searchControl = new FormControl('');
   selectedCategory = 'all';
-  
+
   // Mock data - replace with actual API calls
   categories = [
     { id: 'all', name: 'All Categories' },
@@ -20,7 +20,7 @@ export class UserDashboardComponent {
     { id: 'mathematics', name: 'Mathematics' },
     { id: 'science', name: 'Science' },
     { id: 'history', name: 'History' },
-    { id: 'general', name: 'General Knowledge' }
+    { id: 'general', name: 'General Knowledge' },
   ];
 
   quizzes = [
@@ -32,7 +32,7 @@ export class UserDashboardComponent {
       totalQuestions: 20,
       timeLimit: 30,
       completed: false,
-      score: null
+      score: null,
     },
     {
       id: 1,
@@ -42,7 +42,7 @@ export class UserDashboardComponent {
       totalQuestions: 20,
       timeLimit: 30,
       completed: true,
-      score: 20
+      score: 20,
     },
     // Add more quiz objects
   ];
@@ -52,7 +52,7 @@ export class UserDashboardComponent {
     averageScore: 78.5,
     quizzesCompleted: 12,
     totalPoints: 1250,
-    rank: 'Gold'
+    rank: 'Gold',
   };
 
   recentActivities = [
@@ -60,22 +60,19 @@ export class UserDashboardComponent {
       type: 'quiz_completed',
       quizName: 'JavaScript Basics',
       score: 85,
-      date: new Date('2024-02-04')
+      date: new Date('2024-02-04'),
     },
     // Add more activities
   ];
 
   filteredQuizzes = [...this.quizzes];
-cover: any;
+  cover: any;
 
   ngOnInit() {
     // Set up search with debounce
     this.searchControl.valueChanges
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged()
-      )
-      .subscribe(searchTerm => {
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((searchTerm) => {
         this.filterQuizzes(searchTerm ?? '', this.selectedCategory);
       });
   }
@@ -87,8 +84,10 @@ cover: any;
   }
 
   filterQuizzes(searchTerm: string, category: string) {
-    this.filteredQuizzes = this.quizzes.filter(quiz => {
-      const matchesSearch = quiz.title.toLowerCase().includes(searchTerm.toLowerCase());
+    this.filteredQuizzes = this.quizzes.filter((quiz) => {
+      const matchesSearch = quiz.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
       const matchesCategory = category === 'all' || quiz.category === category;
       return matchesSearch && matchesCategory;
     });

@@ -1,4 +1,4 @@
-<section id="home-section">
+<!-- <section id="home-section">
   <div class="container-fluid text-center">
     <div id="home-sec" class="d-flex justify-content-center align-items-center">
       <div class="quote-sec w-50 mt-5 pt-5">
@@ -15,4 +15,35 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
+<div class="container-fluid">
+  <div class="row g-3">
+    <!-- Search Field -->
+    <div class="col-md-8 p-3">
+      <div class="search-wrapper">
+        <input
+          type="text"
+          class="form-control search-input"
+          placeholder="Search quizzes....."
+          [(ngModel)]="searchText"
+        />
+        <mat-icon class="search-icon">search</mat-icon>
+      </div>
+    </div>
+
+    <!-- Category Dropdown -->
+    <div class="col-md-4 p-3">
+      <div class="category-wrapper">
+        <select
+          class="form-select category-select"
+          [(ngModel)]="selectedCategory"
+        >
+          <option value="" selected>Categories</option>
+          <option *ngFor="let category of categories" [value]="category.value">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

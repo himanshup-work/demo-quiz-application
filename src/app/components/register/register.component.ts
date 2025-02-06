@@ -1,16 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { IApiResponse, IUserRegistration } from '../../model/user.model';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, RouterLink],
+  standalone: true,
+  imports: [FormsModule, RouterLink, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
-  userObj: any = {
+  userObj: IUserRegistration = {
     userId: '',
     firstName: '',
     lastName: '',
@@ -21,43 +24,70 @@ export class RegisterComponent {
     image: '',
   };
 
-  httpClient = inject(HttpClient);
-  model: any = {};
-  cover!: string;
-  cover_file: any;
-  showError = false;
+  private httpClient = inject(HttpClient);
+  private router = inject(Router);
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
+  cover: string | null = null;
+  coverFile: File | null = null;
+  showError = false;
+  showPassword = false;
+  isLoading = false;
+
+  onFileSelected(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+
     if (file) {
-      this.cover_file = file;
+      this.coverFile = file;
       const reader = new FileReader();
+
       reader.onload = () => {
         const dataUrl = reader.result as string;
         this.userObj.image = dataUrl.split(',')[1];
         this.cover = dataUrl;
       };
+
       reader.readAsDataURL(file);
       this.showError = false;
     }
   }
 
-  retrievedUser: any = {};
-  onSubmit(form: NgForm) {
+  onSubmit(form: NgForm): void {
+    console.log(this.userObj.image);
     if (form.invalid) {
-      console.log('invalid form');
       form.control.markAllAsTouched();
       if (!this.cover) {
         this.showError = true;
       }
       return;
-    } else {
-      let url = 'http://localhost:8080/user/create';
-      this.httpClient.post(url, this.userObj).subscribe((res: any) => {
-        if (res.status) {
-          alert(res.message);
-        }
-      });
     }
+
+    if (this.userObj.password !== this.userObj.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    this.isLoading = true;
+    const url = 'http://localhost:8080/user/create';
+
+    this.httpClient.post<IApiResponse>(url, this.userObj).subscribe({
+      next: (response) => {
+        if (response.status) {
+          alert(response.message);
+          this.router.navigate(['/login']);
+        }
+      },
+      error: (error) => {
+        console.error('Registration error:', error);
+        alert('Registration failed. Please try again.');
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 }
