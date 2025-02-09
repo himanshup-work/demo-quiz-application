@@ -11,12 +11,12 @@ export class StorageService {
 
   constructor() { }
 
-  public saveToken(token: string){
+  static saveToken(token: string){
     window.localStorage.removeItem(TOKEN);
     window.localStorage.setItem(TOKEN, token);
   }
 
-  public saveLoggedInUser(user: ILoggedInUser){
+  static saveLoggedInUser(user: ILoggedInUser){
     window.localStorage.removeItem(USER);
     window.localStorage.setItem(USER, JSON.stringify(user));
   }

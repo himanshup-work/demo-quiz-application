@@ -14,9 +14,9 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  {path: 'userHome', component: UserHomeComponent},
-  {path: 'updateUser', component: UpdateUserComponent},
-  {path: 'createQuiz', component: CreateQuizComponent},
-  {path: 'userDashboard', component: UserDashboardComponent},
+  {path: 'user-home', component: UserHomeComponent},
+  {path: 'update-user', component: UpdateUserComponent},
+  {path: 'create-quiz', component: CreateQuizComponent},
+  {path: 'user-dashboard', component: UserDashboardComponent},
   {path: 'navbar', component: NavbarComponent},
 ];

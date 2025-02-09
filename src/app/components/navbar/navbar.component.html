@@ -13,42 +13,56 @@
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active">
+          <a class="nav-link" routerLink="/home" routerLinkActive="active">
             <mat-icon>home</mat-icon>
             <span>Home</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">
+        <li class="nav-item" *ngIf="isUserLoggedIn">
+          <a class="nav-link" routerLink="/user-dashboard" routerLinkActive="active">
             <mat-icon>dashboard</mat-icon>
             <span>Dashboard</span>
           </a>
         </li>
-        <!-- <li class="nav-item">
-            <a class="nav-link" routerLink="/leaderboard" routerLinkActive="active">
-              <mat-icon>leaderboard</mat-icon>
-              <span>Leaderboard</span>
-            </a>
-          </li> -->
-        @if (!isLoggedIn) {
+        <li class="nav-item" *ngIf="isAdminLoggedIn">
+          <a
+            class="nav-link"
+            routerLink="/leaderboard"
+            routerLinkActive="active"
+          >
+            <mat-icon>leaderboard</mat-icon>
+            <span>Leaderboard</span>
+          </a>
+        </li>
         <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="">
+            <mat-icon>info</mat-icon>
+            <span>About Us</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="">
+            <mat-icon>call</mat-icon>
+            <span>Contact Us</span>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="!(isAdminLoggedIn || isUserLoggedIn)">
           <a class="nav-link login-btn" routerLink="/login">
             <mat-icon>login</mat-icon>
             <span>Login</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="!(isAdminLoggedIn || isUserLoggedIn)">
           <a class="nav-link register-btn" routerLink="/register">
             <mat-icon>person_add</mat-icon>
             <span>Register</span>
           </a>
         </li>
-        } @else {
-        <li class="nav-item dropdown">
+        <li class="nav-item" *ngIf="(isAdminLoggedIn || isUserLoggedIn)">
           <a
-            class="nav-link dropdown-toggle profile-dropdown"
+            class="nav-link"
             role="button"
-            data-bs-toggle="dropdown"
+            (click)="toggleSidebar()"
           >
             <img
               [src]="userAvatar || 'assets/default-avatar.png'"
@@ -57,29 +71,8 @@
             />
             <span class="ms-2">{{ userName }}</span>
           </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-              <a class="dropdown-item" routerLink="/updateUser">
-                <mat-icon>person</mat-icon>
-                <span>Profile</span>
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" routerLink="/userDashboard">
-                <mat-icon>quiz</mat-icon>
-                <span>My Quizzes</span>
-              </a>
-            </li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <a class="dropdown-item" type="button" (click)="logout()">
-                <mat-icon>logout</mat-icon>
-                <span>Logout</span>
-              </a>
-            </li>
-          </ul>
         </li>
-        }
+        <!-- } -->
       </ul>
     </div>
   </div>
@@ -95,9 +88,16 @@
 <div class="sidebar" [class.show]="isSidebarOpen">
   <div class="sidebar-header">
     <img src="images/profile.png" alt="Profile" class="sidebar-profile-pic" />
-    @if (isLoggedIn) {
+    @if (isAdminLoggedIn || isUserLoggedIn) {
     <h5>{{ userName }}</h5>
     <p class="text-muted">{{ userEmail }}</p>
+    <a 
+      class="btn btn-primary"
+      routerLink="update-user"
+      (click)="toggleSidebar()"
+    >
+      Update Profile
+    </a>
     } @else {
     <h5>Welcome!</h5>
     <p class="text-muted">Please login to continue</p>
@@ -105,12 +105,16 @@
   </div>
 
   <div class="sidebar-content">
-    <a routerLink="/" class="sidebar-item" (click)="toggleSidebar()">
+    <a 
+      routerLink="/" 
+      class="sidebar-item" 
+      (click)="toggleSidebar()"
+    >
       <mat-icon>home</mat-icon>
       <span>Home</span>
     </a>
     <a
-      *ngIf="isLoggedIn"
+      *ngIf="isUserLoggedIn"
       routerLink="/dashboard"
       class="sidebar-item"
       (click)="toggleSidebar()"
@@ -118,17 +122,32 @@
       <mat-icon>dashboard</mat-icon>
       <span>Dashboard</span>
     </a>
-    <!-- <a routerLink="/leaderboard" class="sidebar-item" (click)="toggleSidebar()">
-        <mat-icon>leaderboard</mat-icon>
-        <span>Leaderboard</span>
-      </a> -->
-
-    @if (isLoggedIn) {
-    <a routerLink="/userHome" class="sidebar-item" (click)="toggleSidebar()">
-      <mat-icon>person</mat-icon>
-      <span>Profile</span>
+    <a
+      *ngIf="isAdminLoggedIn"
+      routerLink="/leaderboard"
+      class="sidebar-item"
+      (click)="toggleSidebar()"
+    >
+      <mat-icon>leaderboard</mat-icon>
+      <span>Leaderboard</span>
+    </a>
+    <a 
+      routerLink="/" 
+      class="sidebar-item" 
+      (click)="toggleSidebar()"
+    >
+      <mat-icon>info</mat-icon>
+      <span>About Us</span>
+    </a>
+    <a 
+      routerLink="/" 
+      class="sidebar-item" 
+      (click)="toggleSidebar()">
+      <mat-icon>call</mat-icon>
+      <span>Contact Us</span>
     </a>
     <a
+      *ngIf="isAdminLoggedIn"
       routerLink="/userDashboard"
       class="sidebar-item"
       (click)="toggleSidebar()"
@@ -136,20 +155,32 @@
       <mat-icon>quiz</mat-icon>
       <span>My Quizzes</span>
     </a>
-    <a (click)="logout()" class="sidebar-item">
+    <a
+      *ngIf="isAdminLoggedIn || isUserLoggedIn"
+      (click)="logout()"
+      class="sidebar-item"
+    >
       <mat-icon>logout</mat-icon>
       <span>Logout</span>
     </a>
-    } @else {
     <div class="sidebar-divider"></div>
-    <a routerLink="/login" class="sidebar-item" (click)="toggleSidebar()">
+    <a
+      *ngIf="!(isAdminLoggedIn || isUserLoggedIn)"
+      routerLink="/login"
+      class="sidebar-item"
+      (click)="toggleSidebar()"
+    >
       <mat-icon>login</mat-icon>
       <span>Login</span>
     </a>
-    <a routerLink="/register" class="sidebar-item" (click)="toggleSidebar()">
+    <a
+      *ngIf="!(isAdminLoggedIn || isUserLoggedIn)"
+      routerLink="/register"
+      class="sidebar-item"
+      (click)="toggleSidebar()"
+    >
       <mat-icon>person_add</mat-icon>
       <span>Register</span>
     </a>
-    }
   </div>
 </div>

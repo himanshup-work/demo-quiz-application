@@ -2,7 +2,6 @@
 
 // Interface for the form data
 export interface IUserRegistration {
-    userId: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -12,11 +11,18 @@ export interface IUserRegistration {
     image: string;
 }
 
-// Interface for the API response
-export interface IApiResponse {
-    status: boolean;
-    message: string;
-    data?: any;
+export class IUserUpdate {
+    userId!: string;
+    firstName!: string;
+    lastName!: string;
+    email!: string;
+    username!: string;
+    bio!: string;    
+    image!: string;
+
+    public setUserId(userId: string){
+        this.userId = userId;
+    }
 }
 
 // Interface for the user data received from backend

@@ -22,7 +22,6 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private authService = inject(AuthService);
-  private storageService = inject(StorageService);
 
   showPassword = false;
   isLoading = false;
@@ -84,13 +83,18 @@ export class LoginComponent {
     this.authService.login(authRequest).subscribe({
       next: (response: any) => {
         if (response.status) {
-          this.storageService.saveToken(response.data.token);
+          StorageService.saveToken(response.data.token);
           const user: ILoggedInUser = {
             userId: response.data.userId,
             userRole: response.data.userRole
           };
-          this.storageService.saveLoggedInUser(user);
-          this.router.navigate(['/dashboard']);
+          StorageService.saveLoggedInUser(user);
+          if(user.userRole.includes('ADMIN')){
+            this.router.navigate(['/learderboard']);
+          }else if (user.userRole === 'USER'){
+            this.router.navigate(['/user-dashboard']);
+          }
+          
         } else {
           this.loginError = 'Invalid credentials';
         }
