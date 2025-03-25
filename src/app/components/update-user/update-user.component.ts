@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { IUserUpdate } from '../../model/user.model';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-update-user',
@@ -15,11 +16,13 @@ import {
   styleUrl: './update-user.component.css',
 })
 export class UpdateUserComponent implements OnInit {
-
   profileForm: FormGroup;
   imagePreview: string | null = null;
+  isLoading = false;
+  error: string | null = null;
+  user: IUserUpdate | null = null;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private userService: UserService) {
     this.profileForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -31,20 +34,57 @@ export class UpdateUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Load user data from service (mock data for now)
-    const userData = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      username: 'john12345',
-      bio: 'Quiz enthusiast and lifelong learner'
-    };
-    this.profileForm.patchValue(userData);
+    this.loadUserData();
+  }
+
+  loadUserData() {
+    this.isLoading = true;
+    this.error = null;
+
+    this.userService.getUser().subscribe({
+      next: (response) => {
+        if (response.status) {
+          this.user = response.data;
+          // Update form with user data after receiving it
+          this.profileForm.patchValue({
+            firstName: this.user?.firstName,
+            lastName: this.user?.lastName,
+            email: this.user?.email,
+            username: this.user?.username,
+            bio: this.user?.bio || '',
+          });
+          if (this.user?.image) {
+            this.imagePreview = this.user?.image;
+          }
+        } else {
+          this.error = response.message;
+        }
+      },
+      error: (error) => {
+        this.error = error.message || 'An error occurred';
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
   }
 
   onFileSelect(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        this.error = 'Please select an image file';
+        return;
+      }
+      
+      // Validate file size (e.g., 5MB max)
+      const maxSize = 5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        this.error = 'File size should not exceed 5MB';
+        return;
+      }
+
       this.profileForm.patchValue({ profileImage: file });
       
       // Create image preview
@@ -58,10 +98,36 @@ export class UpdateUserComponent implements OnInit {
 
   onSubmit(): void {
     if (this.profileForm.valid) {
-      console.log('Form data:', this.profileForm.value);
-      // Add your API call here to update user profile
+      this.isLoading = true;
+      this.error = null;
+
+      // Create FormData object for file upload
+      const formData = new FormData();
+      Object.keys(this.profileForm.value).forEach(key => {
+        if (key === 'profileImage' && this.profileForm.get(key)?.value) {
+          formData.append(key, this.profileForm.get(key)?.value);
+        } else if (this.profileForm.get(key)?.value) {
+          formData.append(key, this.profileForm.get(key)?.value);
+        }
+      });
+
+      this.userService.getUser().subscribe({
+        next: (res) => {
+          if (res.status) {
+            // Handle success (e.g., show success message, redirect)
+            console.log('Profile updated successfully');
+            this.loadUserData(); // Refresh user data
+          } else {
+            this.error = res.message;
+          }
+        },
+        error: (error) => {
+          this.error = error.message || 'Failed to update profile';
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      });
     }
   }
 }
-
-
