@@ -4,7 +4,7 @@ import { IAuthRequest, IAuthResponse } from '../../model/auth.model';
 import { Observable } from 'rxjs';
 import { IUserRegistration } from '../../model/user.model';
 
-const BASE_URL = "http://localhost:8080/"
+const BASE_URL = "http://localhost:8082/"
 
 @Injectable({
   providedIn: 'root'

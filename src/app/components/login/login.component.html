@@ -76,15 +76,9 @@
         <button
           type="submit"
           class="btn btn-primary w-100 py-2"
-          [disabled]="userForm.invalid || isLoading"
-        >
-          @if(isLoading) {
-          <span
-            class="spinner-border spinner-border-sm me-2"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          Logging in... } @else { Login }
+          [disabled]="userForm.invalid"
+        > 
+          Login 
         </button>
 
         <!-- Link to Sign Up -->

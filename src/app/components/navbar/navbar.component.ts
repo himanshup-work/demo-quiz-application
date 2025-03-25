@@ -34,8 +34,8 @@ export class NavbarComponent {
       this.router.events.subscribe(event => {
         this.isAdminLoggedIn = StorageService.isAdminLoggedIn();
         // this.isAdminLoggedIn = true;
-        // this.isUserLoggedIn = StorageService.isUserLoggedIn();
-        this.isUserLoggedIn = true;
+        this.isUserLoggedIn = StorageService.isUserLoggedIn();
+        // this.isUserLoggedIn = false;
       });
   }
 
@@ -50,6 +50,8 @@ export class NavbarComponent {
     this.isUserLoggedIn = false;
     this.isUserLoggedIn = false;
     // Implement logout logic
+    StorageService.signout();
+    this.router.navigateByUrl('login');
     console.log('Logging out...');
   }
 }

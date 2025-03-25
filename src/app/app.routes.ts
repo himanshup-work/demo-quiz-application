@@ -7,6 +7,7 @@ import { UpdateUserComponent } from './components/update-user/update-user.compon
 import { CreateQuizComponent } from './components/create-quiz/create-quiz.component';
 import { UserDashboardComponent } from './components/user-dashboard/user-dashboard.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
 
 export const routes: Routes = [
   // {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -19,4 +20,5 @@ export const routes: Routes = [
   {path: 'create-quiz', component: CreateQuizComponent},
   {path: 'user-dashboard', component: UserDashboardComponent},
   {path: 'navbar', component: NavbarComponent},
+  {path: 'leaderboard', component: LeaderboardComponent}
 ];

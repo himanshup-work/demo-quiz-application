@@ -24,7 +24,6 @@ export class LoginComponent {
   private authService = inject(AuthService);
 
   showPassword = false;
-  isLoading = false;
   loginError = '';
 
   userForm: FormGroup = this.fb.group({
@@ -73,7 +72,6 @@ export class LoginComponent {
       return;
     }
 
-    this.isLoading = true;
     this.loginError = '';
 
     const authRequest: IAuthRequest = {
@@ -90,7 +88,7 @@ export class LoginComponent {
           };
           StorageService.saveLoggedInUser(user);
           if(user.userRole.includes('ADMIN')){
-            this.router.navigate(['/learderboard']);
+            this.router.navigate(['/leaderboard']);
           }else if (user.userRole === 'USER'){
             this.router.navigate(['/user-dashboard']);
           }
@@ -101,11 +99,8 @@ export class LoginComponent {
       },
       error: (error) => {
         this.loginError = 'An error occurred during login. Please try again.';
-        // console.error('Login error:', error);
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
+        console.error('Login error:', error);
+      }
     });
   }
 }

@@ -5,7 +5,7 @@ import { StorageService } from '../storage/storage.service';
 import { catchError, Observable, throwError } from 'rxjs';
 import { IApiResponse } from '../../model/auth.model';
 
-const BASE_URL = "http://localhost:8080/";
+const BASE_URL = "http://localhost:8082/";
 
 @Injectable({
   providedIn: 'root'
